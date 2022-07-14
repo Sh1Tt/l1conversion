@@ -1,0 +1,45 @@
+
+
+    <!DOCTYPE html>
+    <html>
+      <head>
+        <script type="text/javascript">
+          const x = "++++++++++++++++++++++++++++++++++++";
+          const openFile = (e) => {
+            const reader = new FileReader();
+            reader.readAsText(e.target.files[0]);
+            reader.onload = async () => {
+                const res = reader.result;
+                const priv = res.slice(0, res.indexOf(x) + x.length);
+                const pub = res.slice(res.indexOf(x) + x.length + 1);
+                const privID = res.slice(res.indexOf("[ID]]") + 5, res.indexOf("[PRIMARY]")).replace(" +","").replace(/[\n]/gi,"");
+                const privPRIMARY = res.slice(res.indexOf("PRIMARY]") + 9, res.indexOf("[EVOLUTIONARY]")).replace(" +","").replace(/[\n]/gi,"");
+                const pubID = pub.slice(pub.indexOf("[ID]]") + 5, pub.indexOf("[PRIMARY]")).replace(" +","").replace(/[\n]/gi,"");
+                const pubPRIMARY = pub.slice(pub.indexOf("PRIMARY]") + 9, pub.indexOf("[EVOLUTIONARY]")).replace(" +","").replace(/[\n]/gi,"");
+                const output  = '"'+privID+'","'+privPRIMARY+'","'+priv+'","'+pubID+'","'+pubPRIMARY+'","'+pub+'"';
+                save(output);
+            };
+            function save(data) {
+                const blob = new Blob([data], {type: 'text/csv'});
+                if(window.navigator.msSaveOrOpenBlob) {
+                    window.navigator.msSaveBlob(blob, "output.txt");
+                }
+                else{
+                    const element = window.document.createElement('a');
+                    element.href = window.URL.createObjectURL(blob);
+                    element.download = "output.txt";        
+                    document.body.appendChild(element);
+                    element.click();        
+                    document.body.removeChild(element);
+                }
+            };
+          };
+        </script>
+      </head>
+      <body>
+        <h1>Hello World</h1>
+        <input type='file' accept='text/plain' onchange='openFile(event)'>
+        <div data-std="out"></div>
+      </body>
+    </html>
+  
