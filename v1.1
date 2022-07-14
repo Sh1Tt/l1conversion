@@ -24,7 +24,7 @@
               const r = reader.result;
               const priv = r.slice(0, endOf(r,mark.eop));
               const pub = r.slice(endOf(r,mark.eop) + 1);
-              const output  = section(priv)+\\nsection(pub);
+              const output = section(priv) + "\\n" + section(pub);
               save(output);
           };
           function save(data) {
